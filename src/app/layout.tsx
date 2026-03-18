@@ -40,9 +40,13 @@ export const metadata: Metadata = {
     description: "성경 속 잃어버린 시간의 조각, 사독 제사장의 364일 에녹달력을 확인해보세요.",
   },
   icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
+    icon: [
+      { url: "/icon.png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
