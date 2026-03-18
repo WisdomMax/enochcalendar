@@ -5,7 +5,21 @@ import { EnochDate } from "@/types/calendar";
 import { getDaysInMonth, getMonthName, getStartIndex, getEnochYearFromGregorian } from "@/utils/enoch-calendar";
 import { fetchFeastData } from "@/utils/fetch-enoch-data";
 import DayCell from "./DayCell";
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, ChevronsLeft, ChevronsRight, ExternalLink, Info, Globe, X } from "lucide-react";
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Calendar as CalendarIcon, 
+  Info, 
+  Globe, 
+  X, 
+  Search, 
+  Menu,
+  Youtube,
+  ExternalLink,
+  Home,
+  ChevronsLeft, 
+  ChevronsRight
+} from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { translations, Language } from '@/lib/i18n';
 import { twMerge } from "tailwind-merge";
@@ -211,7 +225,8 @@ export default function Calendar() {
              </h1>
              <button 
               onClick={() => setIsLangModalOpen(true)}
-              className="absolute right-6 w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg"
+              className="absolute right-6 w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
+              title={t.selectLanguage}
              >
                <Globe className="w-4 h-4" />
              </button>
@@ -222,11 +237,6 @@ export default function Calendar() {
             <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 lg:p-8 space-y-5 backdrop-blur-xl shadow-2xl relative group/card break-words">
               <button 
                 onClick={() => setIsLangModalOpen(true)}
-                className="absolute top-4 right-4 p-2.5 bg-white/5 hover:bg-white/15 rounded-xl border border-white/10 text-white/50 hover:text-white transition-all group flex items-center justify-center shadow-lg hover:shadow-cyan-500/10 active:scale-95"
-                title={t.selectLanguage}
-              >
-                <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-              </button>
               <h1 className="text-3xl lg:text-[40px] font-black text-white leading-[1.1] tracking-tighter drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] break-words">
                 <span className="cosmic-gradient-text block mb-2 text-xl lg:text-2xl break-words">{t.subtitle}</span>
                 {t.title}
@@ -284,16 +294,23 @@ export default function Calendar() {
           </div>
         </div>
 
-        {/* 유튜브 버튼 (PC에서는 사이드바 하단, 모바일은 맨 하단으로 order-last 처리) */}
-        <div className="w-full hidden lg:flex justify-center">
-            <a href="https://www.youtube.com/@마지막시대사람들TV" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-center gap-4 px-6 py-5 bg-slate-900/40 backdrop-blur-md hover:bg-slate-900/60 text-white rounded-2xl transition-all shadow-xl border border-white/10 active:scale-95 scale-100 hover:scale-105 overflow-hidden relative w-full">
-             <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-             <div className="relative w-8 h-6 transition-transform group-hover:scale-110 duration-300 shrink-0 flex items-center justify-center">
-               <img src="/img/youtube_logo.png" alt="YouTube Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,0,0,0.5)]" />
-             </div>
-             <span className="text-[14px] font-black relative z-10 cosmic-gradient-text drop-shadow-md whitespace-nowrap uppercase tracking-tight">{t.youtubeButton}</span>
-           </a>
-        </div>
+        {/* 유튜브 & 홈페이지 버튼 (PC에서는 사이드바 하단) */}
+         <div className="w-full hidden lg:flex flex-row gap-3">
+             <a href="https://www.youtube.com/@마지막시대사람들TV" target="_blank" rel="noopener noreferrer" className="flex-1 group flex flex-col items-center justify-center gap-2 p-4 bg-slate-900/40 backdrop-blur-md hover:bg-slate-900/60 text-white rounded-2xl transition-all shadow-xl border border-white/10 active:scale-95 scale-100 hover:scale-105 overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative w-8 h-6 transition-transform group-hover:scale-110 duration-300 shrink-0 flex items-center justify-center">
+                <img src="/img/youtube_logo.png" alt="YouTube Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,0,0,0.5)]" />
+              </div>
+              <span className="text-[10px] font-black relative z-10 cosmic-gradient-text drop-shadow-md whitespace-nowrap uppercase tracking-tighter">YouTube</span>
+            </a>
+            <a href="https://masisa.whyimstillalive.com/" target="_blank" rel="noopener noreferrer" className="flex-1 group flex flex-col items-center justify-center gap-2 p-4 bg-slate-900/40 backdrop-blur-md hover:bg-slate-900/60 text-white rounded-2xl transition-all shadow-xl border border-white/10 active:scale-95 scale-100 hover:scale-105 overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative w-8 h-8 transition-transform group-hover:scale-110 duration-300 shrink-0 flex items-center justify-center bg-cyan-500/20 rounded-lg p-1.5 border border-cyan-500/30">
+                <Home className="w-full h-full text-cyan-300" />
+              </div>
+              <span className="text-[10px] font-black relative z-10 text-cyan-400 drop-shadow-md whitespace-nowrap uppercase tracking-tighter">Homepage</span>
+            </a>
+         </div>
 
         {/* 하단 카피라이트 박스 디자인 - 센터 정렬 및 가독성 최적화 */}
         <div className="hidden lg:flex flex-col items-center justify-center p-6 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 mt-auto shadow-2xl drop-shadow-xl">
@@ -393,13 +410,20 @@ export default function Calendar() {
           </div>
         </div>
 
-        <div className="lg:hidden w-full pt-4 pb-12 flex justify-center mt-2">
-          <div className="flex items-center justify-between w-full max-w-sm px-6 py-4 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl">
-            <a href="https://www.youtube.com/@마지막시대사람들TV" target="_blank" rel="noopener noreferrer" className="group shrink-0">
-               <div className="relative w-10 h-8 flex items-center justify-center transition-transform hover:scale-110">
-                 <img src="/img/youtube_logo.png" alt="YouTube" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,0,0,0.5)]" />
-               </div>
-            </a>
+         <div className="lg:hidden w-full pt-4 pb-12 flex justify-center mt-2">
+           <div className="flex items-center justify-between w-full max-w-sm px-6 py-4 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl">
+             <div className="flex items-center gap-4">
+               <a href="https://www.youtube.com/@마지막시대사람들TV" target="_blank" rel="noopener noreferrer" className="group shrink-0">
+                  <div className="relative w-10 h-8 flex items-center justify-center transition-transform hover:scale-110">
+                    <img src="/img/youtube_logo.png" alt="YouTube" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,0,0,0.5)]" />
+                  </div>
+               </a>
+               <a href="https://masisa.whyimstillalive.com/" target="_blank" rel="noopener noreferrer" className="group shrink-0">
+                  <div className="w-10 h-10 flex items-center justify-center bg-cyan-500/20 rounded-xl border border-cyan-500/30 text-cyan-300 transition-transform hover:scale-110 active:scale-95">
+                    <Home className="w-5 h-5 shadow-[0_0_10px_rgba(34,211,238,0.4)]" />
+                  </div>
+               </a>
+             </div>
             <div className="flex flex-col items-end text-right">
                <p className="text-[10px] font-black text-white tracking-[0.2em] mb-1 opacity-90 uppercase" style={{ fontFamily: "'Kanit', sans-serif" }}>
                  © {currentYear} ENOCH CALENDAR
