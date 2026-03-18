@@ -235,8 +235,6 @@ export default function Calendar() {
            <div className="hidden lg:flex flex-col gap-8">
             {/* 타이틀 영역 - 대형화 및 다크 글래스 패널 적용 */}
             <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 lg:p-8 space-y-5 backdrop-blur-xl shadow-2xl relative group/card break-words">
-              <button 
-                onClick={() => setIsLangModalOpen(true)}
               <h1 className="text-3xl lg:text-[40px] font-black text-white leading-[1.1] tracking-tighter drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] break-words">
                 <span className="cosmic-gradient-text block mb-2 text-xl lg:text-2xl break-words">{t.subtitle}</span>
                 {t.title}
