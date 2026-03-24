@@ -31,6 +31,10 @@ export interface Translations {
   basisLabel2: string;
   basisLabel3: string;
   systemInfo: string;
+  enochView: string;
+  gregorianView: string;
+  toggleView: string;
+  gregorianWeekdays: string[];
   feastNames: Record<string, string>;
 }
 
@@ -66,6 +70,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "에녹 1서",
     basisLabel3: "불변의 질서",
     systemInfo: "364일 / 360일 체계",
+    enochView: "에녹달력 보기",
+    gregorianView: "그레고리력 보기",
+    toggleView: "달력 전환",
+    gregorianWeekdays: ["일", "월", "화", "수", "목", "금", "토"],
     feastNames: {
       "유월절": "유월절", "무교절": "무교절", "초실절": "초실절", "오순절": "오순절", "나팔절": "나팔절", "속죄일": "속죄일", "초막절": "초막절", "춘분점": "춘분점", "안식일": "안식일", "절기안식일": "절기안식일", "일차": "일차", "새해시작": "새해시작", "새달일": "새달일", "성경적 새해": "성경적 새해", "성경적새해": "성경적 새해"
     }
@@ -101,6 +109,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "1 Enoch",
     basisLabel3: "Immutable Order",
     systemInfo: "364-Day / 360-Day System",
+    enochView: "Enoch View",
+    gregorianView: "Gregorian View",
+    toggleView: "Toggle View",
+    gregorianWeekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     feastNames: {
       "유월절": "Passover", "무교절": "Unleavened Bread", "초실절": "First Fruits", "오순절": "Pentecost", "나팔절": "Trumpets", "속죄일": "Atonement", "초막절": "Tabernacles", "춘분점": "Equinox", "안식일": "Sabbath", "절기안식일": "Feast Sabbath", "일차": "Day", "새해시작": "New Year Start", "새달일": "New Month Day", "성경적 새해": "Biblical New Year", "성경적새해": "Biblical New Year"
     }
@@ -136,6 +148,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "以诺一书",
     basisLabel3: "永恒秩序",
     systemInfo: "364天 / 360天 体系",
+    enochView: "以诺历视图",
+    gregorianView: "公历视图",
+    toggleView: "切换视图",
+    gregorianWeekdays: ["日", "一", "二", "三", "四", "五", "六"],
     feastNames: {
       "유월절": "逾越节", "무교절": "无酵节", "초실절": "初熟节", "五旬节": "五旬节", "나팔절": "吹角节", "속죄일": "赎罪日", "초막절": "住棚节", "춘분점": "春分点", "안식일": "安息日", "절기안식일": "节期安息日", "일차": "日", "새해시작": "新年伊始", "새달일": "新月日", "성경적 새해": "圣经新年", "성경적새해": "圣经新年"
     }
@@ -171,6 +187,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "1 Enoc",
     basisLabel3: "Orden Inmutable",
     systemInfo: "Sistema de 364 días / 360 días",
+    enochView: "Vista Enoc",
+    gregorianView: "Vista Gregoriana",
+    toggleView: "Cambiar Vista",
+    gregorianWeekdays: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
     feastNames: {
       "유월절": "Pascua", "무교절": "Panes sin Levadura", "초실절": "Primicias", "오순절": "Pentecostés", "나팔절": "Trompetas", "속죄일": "Expiación", "초막절": "Tabernáculos", "춘분점": "Equinoccio", "안식일": "Sábado", "절기안식일": "Sábado de Fiesta", "일차": "Día", "새해시작": "Inicio de Año Nuevo", "새달일": "Día de Luna Nueva", "성경적 새해": "Año Nuevo Bíblico", "성경적새해": "Año Nuevo Bíblico"
     }
@@ -206,6 +226,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "1 Енох",
     basisLabel3: "Неизменный порядок",
     systemInfo: "364-дневная / 360-дневная система",
+    enochView: "Вид Еноха",
+    gregorianView: "Григорианский вид",
+    toggleView: "Переключить вид",
+    gregorianWeekdays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     feastNames: {
       "유월절": "Пасха", "무교절": "Опресноки", "초실절": "Первые плоды", "오순절": "Пятидесятница", "나팔절": "Трубы", "속죄일": "Искупление", "초막절": "Кущи", "춘분점": "Равноденствие", "안식일": "Шаббат", "절기안식일": "Праздничный Шаббат", "일차": "День", "새해시작": "Начало Нового года", "새달일": "День Новой Луны", "성경적 새해": "Библейский Новый год", "성경적새해": "Библейский Новый год"
     }
@@ -241,6 +265,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "1 Enoque",
     basisLabel3: "Ordem Imutável",
     systemInfo: "Sistema de 364 dias / 360 dias",
+    enochView: "Vista Enoque",
+    gregorianView: "Vista Gregoriana",
+    toggleView: "Alternar Vista",
+    gregorianWeekdays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
     feastNames: {
       "유월절": "Páscoa", "무교절": "Pães Asmos", "초실절": "Primícias", "오순절": "Pentecostes", "나팔절": "Trompetas", "속죄일": "Expiação", "초막절": "Tabernáculos", "춘분점": "Equinócio", "안식일": "Shabat", "절기안식일": "Shabat de Festa", "일차": "Dia", "새해시작": "Início do Ano Novo", "새달일": "Dia da Lua Nova", "성경적 새해": "Ano Novo Bíblico", "성경적새해": "Ano Novo Bíblico"
     }
@@ -276,6 +304,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "1 हनोक",
     basisLabel3: "अपरिवर्तनीय आदेश",
     systemInfo: "364-दिन / 360-दिन प्रणाली",
+    enochView: "हनोक दृश्य",
+    gregorianView: "ग्रेगोरियन दृश्य",
+    toggleView: "दृश्य बदलें",
+    gregorianWeekdays: ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"],
     feastNames: {
       "유월절": "फसह", "무교절": "बेखमीर रोटी", "초실절": "प्रथम फल", "오순절": "पिन्तेकुस्त", "나팔절": "तुरही", "속죄일": "प्रायश्चित", "초막절": "तंबू", "춘분점": "विषुव", "안식일": "शाबात", "절기안식일": "पर्व शाबात", "일차": "दिन", "새해시작": "नया साल शुरू", "새달일": "नया महीना दिन", "성경적 새해": "बाइबिल नया साल", "성경적새해": "बाइबिल नया साल"
     }
@@ -311,6 +343,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "1 Henoch",
     basisLabel3: "Unveränderliche Ordnung",
     systemInfo: "364-Tage / 360-Tage System",
+    enochView: "Enoch-Ansicht",
+    gregorianView: "Gregorianische Ansicht",
+    toggleView: "Ansicht wechseln",
+    gregorianWeekdays: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
     feastNames: {
       "유월절": "Passah", "무교절": "Ungesäuerte Brote", "초실절": "Erstlingsfrüchte", "오순절": "Pfingsten", "나팔절": "Posaunen", "속죄일": "Versöhnung", "초막절": "Laubhütten", "춘분점": "Tagundnachtgleiche", "안식일": "Sabbat", "절기안식일": "Festsabbat", "일차": "Tag", "새해시작": "Neujahrsbeginn", "새달일": "Neumondstag", "성경적 새해": "Biblisches Neujahr", "성경적새해": "Biblisches Neujahr"
     }
@@ -346,6 +382,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "חנוך א'",
     basisLabel3: "סדר בלתי משתנה",
     systemInfo: "מערכת 364 ימים / 360 ימים",
+    enochView: "תצוגת חנוך",
+    gregorianView: "תצוגה גרגוריאנית",
+    toggleView: "החלף תצוגה",
+    gregorianWeekdays: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
     feastNames: {
       "유월절": "פסח", "무교절": "חג המצות", "초실절": "ביכורים", "오순절": "שבועות", "나팔절": "יום תרועה", "속죄일": "יום כיפור", "초막절": "סוכות", "춘분점": "נקודת השוויון", "안식일": "שבת", "절기안식일": "שבת מועד", "일차": "יום", "새해시작": "תחילת שנה חדשה", "새달일": "יום ראש חודש", "성경적 새해": "ראש השנה המקראי", "성경적새해": "ראש השנה המקראי"
     }
@@ -381,6 +421,10 @@ export const translations: Record<Language, Translations> = {
     basisLabel2: "エ노크의 第一の書",
     basisLabel3: "不変の秩序",
     systemInfo: "364日 / 360日 体系",
+    enochView: "エノク暦表示",
+    gregorianView: "グレゴリオ暦表示",
+    toggleView: "表示切替",
+    gregorianWeekdays: ["日", "月", "火", "水", "木", "金", "土"],
     feastNames: {
       "유월절": "過越の祭", "무교절": "種入れぬパンの祭", "초실절": "初穂の祭", "오순절": "五旬節", "나팔절": "ラッパ의 祭", "속죄일": "贖죄의 日", "초막절": "仮庵の祭", "춘분점": "春分点", "안식일": "安息日", "절기안식일": "祭司安息日", "일차": "日目", "새해시작": "新年の始まり", "새달일": "新月の日", "성경적 새해": "聖書的新年", "성경적새해": "聖書的新年"
     }

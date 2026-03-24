@@ -68,3 +68,34 @@ export const isToday = (gregorianDate: string): boolean => {
 
 export const getMonthName = (month: number, langMonths?: string[]): string => langMonths ? langMonths[month - 1] : `${month}월`;
 export const getStartIndex = (month: number): number => START_DAY_MAP[month] || 0;
+
+export const getGregorianDaysInMonth = (year: number, month: number, externalFeasts: Partial<EnochDate>[] = []): EnochDate[] => {
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const days: EnochDate[] = [];
+  
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const dateObj = new Date(dateStr);
+    const dayOfWeek = dateObj.getDay(); // 0(일) ~ 6(토)
+    
+    // 그레고리안 요일을 에녹 스타일 요일로 변환 (일요일이 0번일 수도 있으나, 여기서는 표시용으로만 사용)
+    const weekdays = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+    const weekday = weekdays[dayOfWeek];
+
+    // 해당 날짜에 대응하는 에녹 정보 검색
+    const foundFeast = externalFeasts.find(f => f.gregorian === dateStr);
+    
+    days.push({
+      enochMonth: foundFeast?.enochMonth || 0,
+      enochDay: foundFeast?.enochDay || 0,
+      monthName: "", // 그레고리안 모드에서는 사용 안함
+      nthDay: 0,
+      weekday: weekday,
+      gregorian: dateStr,
+      feast: foundFeast?.feast || "",
+      isEquinox: foundFeast?.isEquinox || false
+    });
+  }
+  
+  return days;
+};

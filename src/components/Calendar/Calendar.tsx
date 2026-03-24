@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { EnochDate } from "@/types/calendar";
-import { getDaysInMonth, getMonthName, getStartIndex, getEnochYearFromGregorian } from "@/utils/enoch-calendar";
+import { getDaysInMonth, getMonthName, getStartIndex, getEnochYearFromGregorian, getGregorianDaysInMonth } from "@/utils/enoch-calendar";
 import { fetchFeastData } from "@/utils/fetch-enoch-data";
 import DayCell from "./DayCell";
 import { 
@@ -18,12 +18,14 @@ import {
   ExternalLink,
   Home,
   ChevronsLeft, 
-  ChevronsRight
+  ChevronsRight,
+  RefreshCw
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { translations, Language } from '@/lib/i18n';
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
+import { ViewMode } from "@/types/calendar";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,6 +35,7 @@ export default function Calendar() {
   const [currentYear, setCurrentYear] = useState<number>(2025);
   const [currentMonth, setCurrentMonth] = useState<number>(1);
   const [days, setDays] = useState<EnochDate[]>([]);
+  const [viewMode, setViewMode] = useState<ViewMode>("enoch");
   const [externalFeasts, setExternalFeasts] = useState<Partial<EnochDate>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentLang, setCurrentLang] = useState<Language>('ko');
@@ -133,8 +136,12 @@ export default function Calendar() {
   }, [availableMonthsList, externalFeasts]);
 
   useEffect(() => {
-    setDays(getDaysInMonth(currentYear, currentMonth, externalFeasts, t.weekdays, t.months));
-  }, [currentYear, currentMonth, externalFeasts, t]);
+    if (viewMode === 'enoch') {
+      setDays(getDaysInMonth(currentYear, currentMonth, externalFeasts, t.weekdays, t.months));
+    } else {
+      setDays(getGregorianDaysInMonth(currentYear, currentMonth, externalFeasts));
+    }
+  }, [currentYear, currentMonth, externalFeasts, t, viewMode]);
 
   const handlePrevMonth = () => {
     if (currentIndex > 0) {
@@ -188,7 +195,7 @@ export default function Calendar() {
   };
 
   const weekdays = ["첫째날", "둘째날", "셋째날", "넷째날", "다섯째날", "여섯째날", "안식일"];
-  const startIndex = getStartIndex(currentMonth);
+  const startIndex = viewMode === 'enoch' ? getStartIndex(currentMonth) : new Date(currentYear, currentMonth - 1, 1).getDay();
 
   if (isLoading) {
     return (
@@ -223,13 +230,24 @@ export default function Calendar() {
              <h1 className="text-[19px] sm:text-4xl font-black gold-gradient-text tracking-tight sm:tracking-[0.4em] drop-shadow-xl uppercase text-left shadow-amber-500/20 whitespace-nowrap leading-none max-w-[calc(100%-100px)] overflow-hidden text-ellipsis" style={{ fontFamily: "'Kanit', sans-serif" }}>
                {t.title}
              </h1>
-             <button 
-              onClick={() => setIsLangModalOpen(true)}
-              className="absolute right-6 w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
-              title={t.selectLanguage}
-             >
-               <Globe className="w-4 h-4" />
-             </button>
+             <div className="flex items-center gap-2 absolute right-6">
+                {/* 뷰 전환 스위치 (모바일) */}
+                <button
+                  onClick={() => setViewMode(prev => prev === 'enoch' ? 'gregorian' : 'enoch')}
+                  className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
+                  title={t.toggleView}
+                >
+                  <RefreshCw className={cn("w-4 h-4 transition-transform duration-500", viewMode === 'gregorian' ? "text-cyan-400 rotate-180" : "text-amber-400")} />
+                </button>
+
+                <button 
+                  onClick={() => setIsLangModalOpen(true)}
+                  className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
+                  title={t.selectLanguage}
+                >
+                  <Globe className="w-4 h-4" />
+                </button>
+             </div>
           </div>
           
            <div className="hidden lg:flex flex-col gap-8">
@@ -248,6 +266,28 @@ export default function Calendar() {
                   {t.systemInfo}
                 </p>
               </div>
+
+              {/* 뷰 전환 스위치 (PC) */}
+              <button
+                onClick={() => setViewMode(prev => prev === 'enoch' ? 'gregorian' : 'enoch')}
+                className="w-full py-4 px-6 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between hover:bg-white/10 transition-all group overflow-hidden relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="flex items-center gap-3 relative z-10">
+                  <div className={cn(
+                    "w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-colors duration-500",
+                    viewMode === 'enoch' ? "bg-amber-500/20 text-amber-400" : "bg-cyan-500/20 text-cyan-400"
+                  )}>
+                    <RefreshCw className={cn("w-5 h-5 transition-transform duration-700", viewMode === 'gregorian' && "rotate-180")} />
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">{t.toggleView}</span>
+                    <span className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+                      {viewMode === 'enoch' ? t.enochView : t.gregorianView}
+                    </span>
+                  </div>
+                </div>
+              </button>
             </div>
 
             {/* 사독 제사장 설명 섹션 */}
@@ -327,7 +367,7 @@ export default function Calendar() {
           <div className="flex flex-col items-center sm:items-start pl-2">
             <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white flex items-center gap-2 md:gap-3 drop-shadow-lg">
               <span className="cosmic-gradient-text">{displayYearRange}</span>
-              <span className="text-white/80">{getMonthName(currentMonth, t.months)}</span>
+              <span className="text-white/80">{viewMode === 'enoch' ? getMonthName(currentMonth, t.months) : `${currentMonth}월`}</span>
             </h2>
           </div>
 
@@ -365,12 +405,12 @@ export default function Calendar() {
           
           {/* 요일 헤더 - overflow-visible을 위해 상단 모서리 라운딩 처리 직접 적용 */}
           <div className="grid grid-cols-7 border-b border-white/10 bg-white/10 relative z-20 rounded-t-3xl overflow-hidden">
-            {t.weekdays.map((day, i) => (
+            {(viewMode === 'enoch' ? t.weekdays : t.gregorianWeekdays).map((day, i) => (
               <div key={day} className={cn(
                 "py-3 md:py-5 text-center font-black tracking-tighter sm:tracking-widest uppercase flex items-center justify-center px-0.5",
                 // 텍스트 길이에 따라 폰트 크기 조절
                 day.length > 5 ? "text-[8px] sm:text-[10px] md:text-sm" : "text-[10px] md:text-sm",
-                i === 6 ? "text-amber-400/90 bg-amber-400/5" : "text-white/40"
+                (viewMode === 'enoch' ? i === 6 : i === 0) ? "text-amber-400/90 bg-amber-400/5" : "text-white/40"
               )}>
                 <span className="break-all line-clamp-2">{day}</span>
               </div>
@@ -379,20 +419,21 @@ export default function Calendar() {
 
           <div className="grid grid-cols-7 h-auto min-h-[430px] md:h-[660px] relative divide-x divide-y divide-white/5 bg-slate-900/40 z-10 rounded-b-3xl overflow-visible">
               {Array.from({ length: startIndex }).map((_, i) => {
-                if (currentMonth === 1 && i === startIndex - 1) {
+                if (viewMode === 'enoch' && currentMonth === 1 && i === startIndex - 1) {
                   const equinoxDay: EnochDate = { enochMonth: 1, enochDay: 0, monthName: t.months[0], nthDay: 0, weekday: t.weekdays[1], gregorian: "", feast: t.equinox, isEquinox: true };
-                  return <DayCell key="equinox-start" day={equinoxDay} colIndex={i} rowIndex={0} language={currentLang} />;
+                  return <DayCell key="equinox-start" day={equinoxDay} colIndex={i} rowIndex={0} language={currentLang} viewMode={viewMode} />;
                 }
                 return <div key={`empty-${i}`} className="bg-slate-950/20" />;
               })}
-              
+
               {days.map((day, index) => (
                 <DayCell 
-                  key={`${currentYear}-${day.enochMonth}-${day.enochDay}`} 
+                  key={`${currentYear}-${day.enochMonth}-${day.enochDay}-${day.gregorian}`} 
                   day={day} 
                   colIndex={(startIndex + index) % 7} 
                   rowIndex={Math.floor((startIndex + index) / 7)} 
                   language={currentLang}
+                  viewMode={viewMode}
                 />
               ))}
 
@@ -400,7 +441,7 @@ export default function Calendar() {
                 const globalIndex = days.length + startIndex + i;
                 if (currentMonth === 12 && i === 0) {
                   const equinoxDay: EnochDate = { enochMonth: 12, enochDay: 32, monthName: t.months[11], nthDay: 365, weekday: "", gregorian: "", feast: t.equinox, isEquinox: true };
-                  return <DayCell key="equinox-end" day={equinoxDay} colIndex={globalIndex % 7} rowIndex={Math.floor(globalIndex / 7)} language={currentLang} />;
+                  return <DayCell key="equinox-end" day={equinoxDay} colIndex={globalIndex % 7} rowIndex={Math.floor(globalIndex / 7)} language={currentLang} viewMode={viewMode} />;
                 }
                 return <div key={`fill-${i}`} className="bg-transparent/5" />;
               })}

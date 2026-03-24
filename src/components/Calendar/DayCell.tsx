@@ -6,6 +6,8 @@ import { isToday } from "@/utils/enoch-calendar";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { ViewMode } from "@/types/calendar";
+
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -15,12 +17,16 @@ interface DayCellProps {
   colIndex: number;
   rowIndex: number;
   language: string;
+  viewMode: ViewMode;
 }
 
-export default function DayCell({ day, colIndex, rowIndex, language }: DayCellProps) {
+export default function DayCell({ day, colIndex, rowIndex, language, viewMode }: DayCellProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const today = isToday(day.gregorian);
-  const isSabbath = day.weekday === "안식일";
+  const isSabbath = viewMode === 'enoch' 
+    ? day.weekday === "안식일" 
+    : new Date(day.gregorian).getDay() === 0; // 그레고리안 모드에서는 일요일이 빨간색/안식일 느낌
+  
   // "안식일"이라는 글자만 있는 경우는 일반 안식일로 처리 (배경색 변경 방지)
   const hasSpecialFeast = !!day.feast && day.feast !== "안식일";
   const hasAnyFeast = !!day.feast;
@@ -33,6 +39,10 @@ export default function DayCell({ day, colIndex, rowIndex, language }: DayCellPr
   // 번역 데이터 가져오기
   const i18n = require("@/lib/i18n");
   const t = i18n.translations[language || 'ko'];
+
+  // 날짜 숫자 결정
+  const mainDate = viewMode === 'enoch' ? day.enochDay : parseInt(day.gregorian.split('-')[2] || "0");
+  const subDateText = viewMode === 'enoch' ? "" : (day.enochMonth > 0 ? `${day.enochMonth}/${day.enochDay}` : "");
 
   // 절기 텍스트 실시간 번역 헬퍼
   const translateFeastInText = (text: string) => {
@@ -250,22 +260,31 @@ export default function DayCell({ day, colIndex, rowIndex, language }: DayCellPr
       )}
 
       {/* 상단: 날짜 및 오늘 라벨 - PC 버전에서 구석으로 더 이동 */}
-      <div className="flex flex-col items-start mb-0.25 md:mb-0.5 relative z-20 min-h-0 ml-1 mt-0.5 md:-ml-0.5 md:-mt-1">
-        <span
-          className={cn(
-            "text-xl sm:text-2xl md:text-4xl font-black tracking-tighter leading-none transition-all drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]",
-            isSabbath ? "text-amber-400" : "text-white/90 group-hover:text-white",
-            today && "text-cyan-300 drop-shadow-[0_0_20px_rgba(0,242,255,1)]"
+      <div className="flex items-start justify-between relative z-20 min-h-0 ml-1 mt-0.5 md:-ml-0.5 md:-mt-1 w-full pr-1">
+        <div className="flex flex-col items-start">
+          <span
+            className={cn(
+              "text-xl sm:text-2xl md:text-4xl font-black tracking-tighter leading-none transition-all drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]",
+              isSabbath ? "text-amber-400" : "text-white/90 group-hover:text-white",
+              today && "text-cyan-300 drop-shadow-[0_0_20px_rgba(0,242,255,1)]"
+            )}
+          >
+            {mainDate}
+          </span>
+          {today && (
+            <div className="flex flex-col items-start pt-0.5 md:pt-1">
+              <span className="text-[7px] md:text-[10px] bg-cyan-400 text-slate-950 px-1.5 md:px-2 py-0.5 md:py-1 rounded-sm md:rounded-md font-black shadow-[0_0_15px_rgba(0,242,255,0.7)] scale-90 md:scale-100 origin-left uppercase tracking-tighter md:tracking-[0.1em] animate-pulse whitespace-nowrap">
+                {t.today}
+              </span>
+            </div>
           )}
-        >
-          {day.enochDay}
-        </span>
-        {today && (
-          <div className="flex flex-col items-start pt-0.5 md:pt-1">
-            <span className="text-[7px] md:text-[10px] bg-cyan-400 text-slate-950 px-1.5 md:px-2 py-0.5 md:py-1 rounded-sm md:rounded-md font-black shadow-[0_0_15px_rgba(0,242,255,0.7)] scale-90 md:scale-100 origin-left uppercase tracking-tighter md:tracking-[0.1em] animate-pulse whitespace-nowrap">
-              {t.today}
-            </span>
-          </div>
+        </div>
+        
+        {/* 서브 날짜 표시 (그레고리안 모드일 때 에녹 날짜) */}
+        {viewMode === 'gregorian' && subDateText && (
+          <span className="text-[9px] md:text-sm font-bold text-white/30 group-hover:text-white/50 transition-colors pt-1">
+            {subDateText}
+          </span>
         )}
       </div>
 

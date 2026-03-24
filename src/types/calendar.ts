@@ -14,3 +14,5 @@ export interface CalendarMonth {
   month: number;
   days: EnochDate[];
 }
+
+export type ViewMode = 'enoch' | 'gregorian';
