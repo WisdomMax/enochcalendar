@@ -33,6 +33,8 @@ export interface Translations {
   systemInfo: string;
   enochView: string;
   gregorianView: string;
+  enochShort: string;
+  gregorianShort: string;
   toggleView: string;
   gregorianWeekdays: string[];
   feastNames: Record<string, string>;
@@ -72,6 +74,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "364일 / 360일 체계",
     enochView: "에녹달력 보기",
     gregorianView: "그레고리력 보기",
+    enochShort: "에녹",
+    gregorianShort: "그레고리",
     toggleView: "달력 전환",
     gregorianWeekdays: ["일", "월", "화", "수", "목", "금", "토"],
     feastNames: {
@@ -111,6 +115,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "364-Day / 360-Day System",
     enochView: "Enoch View",
     gregorianView: "Gregorian View",
+    enochShort: "Enoch",
+    gregorianShort: "Greg.",
     toggleView: "Toggle View",
     gregorianWeekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     feastNames: {
@@ -150,6 +156,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "364天 / 360天 体系",
     enochView: "以诺历视图",
     gregorianView: "公历视图",
+    enochShort: "以诺",
+    gregorianShort: "公历",
     toggleView: "切换视图",
     gregorianWeekdays: ["日", "一", "二", "三", "四", "五", "六"],
     feastNames: {
@@ -189,6 +197,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "Sistema de 364 días / 360 días",
     enochView: "Vista Enoc",
     gregorianView: "Vista Gregoriana",
+    enochShort: "Enoc",
+    gregorianShort: "Greg.",
     toggleView: "Cambiar Vista",
     gregorianWeekdays: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
     feastNames: {
@@ -228,6 +238,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "364-дневная / 360-дневная система",
     enochView: "Вид Еноха",
     gregorianView: "Григорианский вид",
+    enochShort: "Енох",
+    gregorianShort: "Грег.",
     toggleView: "Переключить вид",
     gregorianWeekdays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     feastNames: {
@@ -267,6 +279,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "Sistema de 364 dias / 360 dias",
     enochView: "Vista Enoque",
     gregorianView: "Vista Gregoriana",
+    enochShort: "Enoque",
+    gregorianShort: "Greg.",
     toggleView: "Alternar Vista",
     gregorianWeekdays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
     feastNames: {
@@ -306,6 +320,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "364-दिन / 360-दिन प्रणाली",
     enochView: "हनोक दृश्य",
     gregorianView: "ग्रेगोरियन दृश्य",
+    enochShort: "हनोक",
+    gregorianShort: "ग्रेगो.",
     toggleView: "दृश्य बदलें",
     gregorianWeekdays: ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"],
     feastNames: {
@@ -345,6 +361,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "364-Tage / 360-Tage System",
     enochView: "Enoch-Ansicht",
     gregorianView: "Gregorianische Ansicht",
+    enochShort: "Henoch",
+    gregorianShort: "Greg.",
     toggleView: "Ansicht wechseln",
     gregorianWeekdays: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
     feastNames: {
@@ -384,6 +402,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "מערכת 364 ימים / 360 ימים",
     enochView: "תצוגת חנוך",
     gregorianView: "תצוגה גרגוריאנית",
+    enochShort: "חנוך",
+    gregorianShort: "גרגורי",
     toggleView: "החלף תצוגה",
     gregorianWeekdays: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
     feastNames: {
@@ -423,6 +443,8 @@ export const translations: Record<Language, Translations> = {
     systemInfo: "364日 / 360日 体系",
     enochView: "エノク暦表示",
     gregorianView: "グレゴリオ暦表示",
+    enochShort: "エノク",
+    gregorianShort: "グレゴ",
     toggleView: "表示切替",
     gregorianWeekdays: ["日", "月", "火", "水", "木", "金", "土"],
     feastNames: {

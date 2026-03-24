@@ -82,6 +82,10 @@ export default function Calendar() {
 
   // [사용자 요청]: 상단 헤더에 현재 에녹 월이 걸쳐 있는 그레고리력 연도 범위를 동적으로 계산
   const displayYearRange = useMemo(() => {
+    if (viewMode === 'gregorian') {
+      return `${currentYear}${t.yearUnit}`;
+    }
+
     if (days.length === 0) return `${currentYear}${t.yearUnit}`;
     
     const gregYears = days
@@ -94,13 +98,10 @@ export default function Calendar() {
     const maxYear = Math.max(...gregYears);
     
     if (minYear === maxYear) {
-      // 해당 월이 한 그레고리 연도 안에만 있으면 2026~2027년 형식을 위해 한 해 전을 붙여주거나, 
-      // 사용자 요청대로 "에녹력은 연도가 따로 없다"는 취지를 살려 범위를 보여줍니다.
-      // 여기서는 사용자가 언급한 "2026~2027년" 스타일을 존중하여 해당 에녹 연도의 범위를 보여줍니다.
       return `${currentYear}~${currentYear + 1}${t.yearUnit}`;
     }
     return `${minYear}~${maxYear}${t.yearUnit}`;
-  }, [days, currentYear]);
+  }, [days, currentYear, viewMode, t.yearUnit]);
 
   useEffect(() => {
     async function loadData() {
@@ -186,12 +187,41 @@ export default function Calendar() {
     const dayStr = String(today.getDate()).padStart(2, '0');
     const todayGreg = `${today.getFullYear()}-${monthStr}-${dayStr}`;
     
-    const match = externalFeasts.find(f => f.gregorian === todayGreg);
-    if (match) {
-      const year = getEnochYearFromGregorian(match.gregorian!);
-      setCurrentYear(year);
-      setCurrentMonth(match.enochMonth!);
+    if (viewMode === 'gregorian') {
+      setCurrentYear(today.getFullYear());
+      setCurrentMonth(today.getMonth() + 1);
+    } else {
+      const match = externalFeasts.find(f => f.gregorian === todayGreg);
+      if (match) {
+        const year = getEnochYearFromGregorian(match.gregorian!);
+        setCurrentYear(year);
+        setCurrentMonth(match.enochMonth!);
+      }
     }
+  };
+
+  const toggleViewMode = () => {
+    const isSwitchingToGregorian = viewMode === 'enoch';
+    
+    if (isSwitchingToGregorian) {
+      // 에녹 -> 서기: 현재 에녹 월의 첫날(Day 1)에 해당하는 서기 날짜를 찾아 그 월로 이동
+      if (days.length > 0 && days[0].gregorian) {
+        const gDate = new Date(days[0].gregorian);
+        setCurrentYear(gDate.getFullYear());
+        setCurrentMonth(gDate.getMonth() + 1);
+      }
+    } else {
+      // 서기 -> 에녹: 현재 서기 월의 1일에 해당하는 에녹 월로 이동
+      const firstDayOfMonth = `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`;
+      const match = externalFeasts.find(f => f.gregorian === firstDayOfMonth);
+      if (match) {
+        const year = getEnochYearFromGregorian(match.gregorian!);
+        setCurrentYear(year);
+        setCurrentMonth(match.enochMonth!);
+      }
+    }
+    
+    setViewMode(isSwitchingToGregorian ? 'gregorian' : 'enoch');
   };
 
   const weekdays = ["첫째날", "둘째날", "셋째날", "넷째날", "다섯째날", "여섯째날", "안식일"];
@@ -232,21 +262,31 @@ export default function Calendar() {
              </h1>
              <div className="flex items-center gap-2 absolute right-6">
                 {/* 뷰 전환 스위치 (모바일) */}
-                <button
-                  onClick={() => setViewMode(prev => prev === 'enoch' ? 'gregorian' : 'enoch')}
-                  className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
-                  title={t.toggleView}
-                >
-                  <RefreshCw className={cn("w-4 h-4 transition-transform duration-500", viewMode === 'gregorian' ? "text-cyan-400 rotate-180" : "text-amber-400")} />
-                </button>
+                <div className="flex flex-col items-center">
+                  <span className="text-[7px] font-black text-amber-400/80 leading-none mb-0.5 uppercase tracking-tighter">
+                    {viewMode === 'enoch' ? t.gregorianShort : t.enochShort}
+                  </span>
+                  <button
+                    onClick={toggleViewMode}
+                    className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
+                    title={t.toggleView}
+                  >
+                    <RefreshCw className={cn("w-4 h-4 transition-transform duration-500", viewMode === 'enoch' ? "text-cyan-400 rotate-180" : "text-amber-400")} />
+                  </button>
+                </div>
 
-                <button 
-                  onClick={() => setIsLangModalOpen(true)}
-                  className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
-                  title={t.selectLanguage}
-                >
-                  <Globe className="w-4 h-4" />
-                </button>
+                <div className="flex flex-col items-center">
+                  <span className="text-[7px] font-black text-white/40 leading-none mb-0.5 uppercase tracking-tighter">
+                    Lang
+                  </span>
+                  <button 
+                    onClick={() => setIsLangModalOpen(true)}
+                    className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full border border-white/20 hover:bg-white/20 transition-all text-white shrink-0 shadow-lg active:scale-95"
+                    title={t.selectLanguage}
+                  >
+                    <Globe className="w-4 h-4" />
+                  </button>
+                </div>
              </div>
           </div>
           
@@ -269,21 +309,21 @@ export default function Calendar() {
 
               {/* 뷰 전환 스위치 (PC) */}
               <button
-                onClick={() => setViewMode(prev => prev === 'enoch' ? 'gregorian' : 'enoch')}
+                onClick={toggleViewMode}
                 className="w-full py-4 px-6 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between hover:bg-white/10 transition-all group overflow-hidden relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="flex items-center gap-3 relative z-10">
                   <div className={cn(
                     "w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-colors duration-500",
-                    viewMode === 'enoch' ? "bg-amber-500/20 text-amber-400" : "bg-cyan-500/20 text-cyan-400"
+                    viewMode === 'enoch' ? "bg-cyan-500/20 text-cyan-400" : "bg-amber-500/20 text-amber-400"
                   )}>
-                    <RefreshCw className={cn("w-5 h-5 transition-transform duration-700", viewMode === 'gregorian' && "rotate-180")} />
+                    <RefreshCw className={cn("w-5 h-5 transition-transform duration-700", viewMode === 'enoch' && "rotate-180")} />
                   </div>
                   <div className="flex flex-col items-start">
                     <span className="text-[10px] text-white/40 font-black uppercase tracking-widest">{t.toggleView}</span>
                     <span className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
-                      {viewMode === 'enoch' ? t.enochView : t.gregorianView}
+                      {viewMode === 'enoch' ? t.gregorianView : t.enochView}
                     </span>
                   </div>
                 </div>

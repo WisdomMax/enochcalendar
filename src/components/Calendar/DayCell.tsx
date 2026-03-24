@@ -23,9 +23,7 @@ interface DayCellProps {
 export default function DayCell({ day, colIndex, rowIndex, language, viewMode }: DayCellProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const today = isToday(day.gregorian);
-  const isSabbath = viewMode === 'enoch' 
-    ? day.weekday === "안식일" 
-    : new Date(day.gregorian).getDay() === 0; // 그레고리안 모드에서는 일요일이 빨간색/안식일 느낌
+  const isSabbath = day.weekday === "안식일" || (day.feast && day.feast.includes("안식일"));
   
   // "안식일"이라는 글자만 있는 경우는 일반 안식일로 처리 (배경색 변경 방지)
   const hasSpecialFeast = !!day.feast && day.feast !== "안식일";
@@ -293,7 +291,7 @@ export default function DayCell({ day, colIndex, rowIndex, language, viewMode }:
         {(day.feast || (isSabbath ? "안식일" : "")) && (
           <div className="w-full text-center px-1">
             <div className="text-white text-[10px] sm:text-xs md:text-lg font-black leading-tight drop-shadow-[0_3px_6px_rgba(0,0,0,0.9)]">
-              {renderFeast(day.feast || "안식일")}
+              {renderFeast(day.feast || (isSabbath ? "안식일" : ""))}
             </div>
           </div>
         )}
